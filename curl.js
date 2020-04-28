@@ -4,7 +4,6 @@ const { program } = require('commander');
 
 program
     .option('-o, --output <string>', 'file in which to store the fetched content')
-    .option('-f, --fetch', 'fetch the url body and print')
     .option('-H, --header', 'set headers of the request')
 
 const opts = program.parse(process.argv);
@@ -15,7 +14,6 @@ const opts = program.parse(process.argv);
 // ********************
 const output = opts.output; // this gives output.txt
 const url = opts.args[0]; // this gives the url
-// console.log(output, url)
 // ********************
 
 if (program.output) {
@@ -34,15 +32,12 @@ if (program.output) {
         })
 }
 
-if (program.header) {
-    const myInit = {
-        method: 'GET',
-        headers: myHeaders,
-        mode: 'cors',
-        cache: 'default'
-    };
-
-    fetch(url, myInit)
-        .then
+if (program.header) { 
+    fetch(url)
+        .then(res => res.headers)
+        .then(headerObj => {
+            console.log(`content-type : ${headerObj.get("content-type")}`)
+        })
+        .catch(reason => console.log(reason))
 
 }
